@@ -15,13 +15,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
+        window = UIWindow(frame: UIScreen.main.bounds)
+        let vc = MovieListView()
+        let navController = UINavigationController(rootViewController: vc)
+        window?.rootViewController = navController
         window = window ?? UIWindow(frame: UIScreen.main.bounds)
         window?.makeKeyAndVisible()
-        let vc = MovieDetailViewController()
-        let navigationController = UINavigationController(rootViewController: vc)
-        window?.rootViewController = navigationController
-//        window?.rootViewController = ViewController()
-//        window?.makeKeyAndVisible()
 
         return true
     }
