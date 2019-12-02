@@ -10,6 +10,9 @@ import Foundation
 import UIKit
 
 let colorPrimary: UIColor = UIColorFromHex(rgbValue: 0x383B4A)
+let colorSecondary: UIColor = UIColorFromHex(rgbValue: 0x9392B2)
+let colorAccentRed: UIColor = UIColorFromHex(rgbValue: 0xA65159)
+let colorAccentYellow: UIColor = UIColorFromHex(rgbValue: 0xE0B453)
 
 private func UIColorFromHex(rgbValue: UInt32, alpha: Double = 1.0) -> UIColor {
     let red = CGFloat((rgbValue & 0xFF0000) >> 16) / 256.0

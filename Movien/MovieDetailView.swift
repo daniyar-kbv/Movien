@@ -11,10 +11,12 @@ import SnapKit
 import Alamofire
 import Kingfisher
 
-class MovieDetailViewController: UIViewController {
+class MovieDetailView: UIViewController {
+    
+    lazy var movieId: Int = 0
     
     var filmPhoto = UIImage(named: "joker-poster")
-    var movie: Movie = Movie(originalTitle: "", posterPath: "", genres: [], overview: "", releaseDate: "", voteAverage: "", productionCountries: [])
+    var movie: MovieFull = MovieFull(originalTitle: "", posterPath: "", genres: [], overview: "", releaseDate: "", voteAverage: "", productionCountries: [])
     var movieName: String = ""
     
     lazy var mainScrollView: UIScrollView = {
@@ -119,17 +121,16 @@ class MovieDetailViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setMovieDetails(id: "7286456")
+        setMovieDetails(id: String(movieId))
+//        setMovieDetails(id: "475557")
         markup()
     }
     
     func getMovieDetail(id: String, completion: @escaping (MovieFull) -> Void) {
-        let url = Constants.TMDBApiBaseUrl + "/movie/tt" + id
-        let headers: HTTPHeaders = [
-            "Authorization": Constants.token
-        ]
+        let url = baseUrl + "/3/movie/" + id
         
         Alamofire.request(url, method: .get, encoding:  URLEncoding.default, headers: headers ).responseJSON(completionHandler: { response in
+            print(response)
             switch response.result {
             case .failure(let error):
                 print(error)
@@ -172,13 +173,12 @@ class MovieDetailViewController: UIViewController {
             self.filmDetailsReleaseDateLabel.text = (self.filmDetailsReleaseDateLabel.text ?? "") + movie.releaseDate
             self.filmDetailsProdCountriesLabel.text = (self.filmDetailsProdCountriesLabel.text ?? "") + movie.productionCountries.joined(separator: ", ")
 
-            self.photoView.kf.setImage(with: URL(string: Constants.imageUrl + movie.posterPath))
+            self.photoView.kf.setImage(with: URL(string: imageUrl + movie.posterPath))
         }
     }
         
         // MARK: - Markup
     private func markup() {
-        title = "ASD"
         navigationController?.navigationBar.prefersLargeTitles = true
 //        view.backgroundColor = UIColor(hexString: Constants.color1)
     

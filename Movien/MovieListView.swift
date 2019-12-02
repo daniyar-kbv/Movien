@@ -82,7 +82,10 @@ class MovieListView: UIViewController, UITableViewDataSource, UITableViewDelegat
         return cell
     }
     
-//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        <#code#>
-//    }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let movieId = movies[indexPath.row].id
+        let movieDetailView = MovieDetailView()
+        movieDetailView.movieId = movieId
+        self.navigationController?.pushViewController(movieDetailView, animated: true)
+    }
 }
