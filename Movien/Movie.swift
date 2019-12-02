@@ -14,7 +14,7 @@ class Movie: Decodable{
     var genres: [String] = []
     var overview: String = ""
     var releaseDate: String = ""
-    var voteAverage: Int? = nil
+    var voteAverage: String = ""
     var productionCountries: [String] = []
     
     init(originalTitle: String,
@@ -22,7 +22,7 @@ class Movie: Decodable{
          genres: [String],
          overview: String,
          releaseDate: String,
-         voteAverage: Int?,
+         voteAverage: String,
          productionCountries: [String]) {
         self.originalTitle = originalTitle
         self.posterPath = posterPath
