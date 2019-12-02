@@ -1,16 +1,17 @@
 //
-//  ViewController.swift
+//  MovieDeatilViewController.swift
 //  Movien
 //
-//  Created by Daniyar on 11/24/19.
+//  Created by Daniyar on 12/2/19.
 //  Copyright © 2019 Daniyar. All rights reserved.
 //
 
 import UIKit
 import SnapKit
 import Alamofire
+import Kingfisher
 
-class ViewController: UIViewController {
+class MovieDetailViewController: UIViewController {
     
     var filmPhoto = UIImage(named: "joker-poster")
     var movie: Movie = Movie(originalTitle: "", posterPath: "", genres: [], overview: "", releaseDate: "", voteAverage: "", productionCountries: [])
@@ -19,7 +20,7 @@ class ViewController: UIViewController {
     lazy var mainScrollView: UIScrollView = {
         let view = UIScrollView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = UIColor(hexString: Constants.color1)
+        view.backgroundColor = colorPrimary
         return view
     }()
     
@@ -29,7 +30,7 @@ class ViewController: UIViewController {
     }()
     
     lazy var photoView: UIImageView = {
-        let view = UIImageView(image: filmPhoto)
+        let view = UIImageView()
         view.contentMode = .scaleAspectFill
         view.layer.masksToBounds = true
         return view
@@ -50,15 +51,18 @@ class ViewController: UIViewController {
     lazy var filmInfo = UIView()
     
     lazy var filmRating: UILabel = {
-        let label = UILabel(frame: CGRect(x: 0, y: 0, width: 200, height: 21))
-        label.textColor = .white
+        let label = UILabel(frame: CGRect(x: 0, y: 0, width: 50, height: 50))
+        label.backgroundColor = colorAccentRed
+        label.textColor = colorAccentYellow
+        label.layer.cornerRadius = 25
+        label.layer.masksToBounds = true
+        label.textAlignment = .center
         return label
     }()
     
     lazy var filmInfoOnPhotoStackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [filmInfo, filmRating])
         stackView.axis = .horizontal
-        stackView.distribution = .fillEqually
 
         return stackView
     }()
@@ -66,16 +70,21 @@ class ViewController: UIViewController {
     lazy var filmOverviewTextView: UITextView = {
         let view = UITextView()
         view.textColor = .white
-        view.backgroundColor = UIColor(hexString: Constants.color1)
+        view.backgroundColor = colorAccentRed
         view.isSelectable = false
         view.isEditable = false
         view.isScrollEnabled = false
         view.translatesAutoresizingMaskIntoConstraints = true
+        view.font = UIFont(name: "AppleSDGothicNeo-Light" , size: 18)
         view.sizeToFit()
         return view
     }()
     
-    lazy var filmDetailsView = UIView()
+    lazy var filmDetailsView: UIView = {
+        view = UIView()
+        view.backgroundColor = colorSecondary
+        return view
+    }()
     
     lazy var filmDetailsLabel: UILabel = {
         var label = UILabel()
@@ -100,8 +109,10 @@ class ViewController: UIViewController {
     
     lazy var reviewsButton: UIButton = {
         let button = UIButton(frame: CGRect(x: 0, y: 0, width: 100, height: 50))
-        button.backgroundColor = .yellow
+        button.backgroundColor = colorAccentRed
         button.setTitle("Reviews", for: .normal)
+        button.layer.cornerRadius = 15
+        button.tintColor = .white
 //        button.addTarget(self, action: #selector(buttonAction), for: .touchUpInside)
         return button
     }()
@@ -112,7 +123,7 @@ class ViewController: UIViewController {
         markup()
     }
     
-    func getMovieDetail(id: String, completion: @escaping (Movie) -> Void) {
+    func getMovieDetail(id: String, completion: @escaping (MovieFull) -> Void) {
         let url = Constants.TMDBApiBaseUrl + "/movie/tt" + id
         let headers: HTTPHeaders = [
             "Authorization": Constants.token
@@ -144,7 +155,7 @@ class ViewController: UIViewController {
                     let countryName = countryTemp["name"]
                     productionCountriesArray.append(countryName as! String)
                 }
-                let movie = Movie(originalTitle: originalTitle as! String, posterPath: posterPath as! String, genres: genresArray, overview: overview as! String, releaseDate: releaseDate as! String, voteAverage: voteAverageString , productionCountries: productionCountriesArray)
+                let movie = MovieFull(originalTitle: originalTitle as! String, posterPath: posterPath as! String, genres: genresArray, overview: overview as! String, releaseDate: releaseDate as! String, voteAverage: voteAverageString , productionCountries: productionCountriesArray)
                 completion(movie)
             }
         })
@@ -160,6 +171,8 @@ class ViewController: UIViewController {
             self.filmOverviewTextView.text = movie.overview
             self.filmDetailsReleaseDateLabel.text = (self.filmDetailsReleaseDateLabel.text ?? "") + movie.releaseDate
             self.filmDetailsProdCountriesLabel.text = (self.filmDetailsProdCountriesLabel.text ?? "") + movie.productionCountries.joined(separator: ", ")
+
+            self.photoView.kf.setImage(with: URL(string: Constants.imageUrl + movie.posterPath))
         }
     }
         
@@ -191,7 +204,7 @@ class ViewController: UIViewController {
         photoView.snp.makeConstraints() {
             $0.top.left.equalTo(0)
             $0.right.equalTo(mainScrollView.snp.right)
-            $0.height.equalTo(300)
+            $0.height.equalTo(400)
         }
         
         
@@ -202,7 +215,7 @@ class ViewController: UIViewController {
         }
         
         filmInfo.snp.makeConstraints(){
-            $0.left.equalTo(photoView.snp.left).offset(-12)
+            $0.left.equalTo(photoView.snp.left).offset(12)
         }
         
         filmInfo.addSubview(filmGenres)
@@ -217,7 +230,13 @@ class ViewController: UIViewController {
         }
         
         filmRating.snp.makeConstraints(){
+            $0.bottom.equalTo(photoView.snp.bottom).offset(-12)
+            $0.right.equalTo(photoView.snp.right).offset(-12)
+        }
+        
+        filmRating.snp.makeConstraints(){
             $0.right.equalTo(photoView.snp.right)
+            $0.width.height.equalTo(50)
         }
         
         mainStackView.addArrangedSubview(filmOverviewTextView)
@@ -226,39 +245,22 @@ class ViewController: UIViewController {
             $0.left.right.equalTo(0)
         }
         
-        mainStackView.addArrangedSubview(filmDetailsView)
+//        mainStackView.addArrangedSubview(filmDetailsView)
 //        filmDetailsView.snp.makeConstraints(){
-//            $0.top.equalTo(0)
+//            $0.top.equalTo(filmOverviewTextView.snp.bottom)
+//            $0.height.equalTo(100)
 //        }
         
-        filmDetailsView.addSubview(filmDetailsLabel)
-        filmDetailsView.addSubview(filmDetailsReleaseDateLabel)
-        filmDetailsView.addSubview(filmDetailsProdCountriesLabel)
+//        filmDetailsView.addSubview(filmDetailsLabel)
+//        filmDetailsView.addSubview(filmDetailsReleaseDateLabel)
+//        filmDetailsView.addSubview(filmDetailsProdCountriesLabel)
         
         view.addSubview(reviewsButton)
         reviewsButton.snp.makeConstraints(){
             $0.bottom.equalTo(view.snp.bottom).offset(-12)
+            $0.centerX.equalTo(view.snp.centerX)
+            $0.width.equalTo(100)
         }
     }
         
-}
-
-extension UIColor {
-    convenience init(hexString: String) {
-        let hex = hexString.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
-        var int = UInt64()
-        Scanner(string: hex).scanHexInt64(&int)
-        let a, r, g, b: UInt64
-        switch hex.count {
-        case 3: // RGB (12-bit)
-            (a, r, g, b) = (255, (int >> 8) * 17, (int >> 4 & 0xF) * 17, (int & 0xF) * 17)
-        case 6: // RGB (24-bit)
-            (a, r, g, b) = (255, int >> 16, int >> 8 & 0xFF, int & 0xFF)
-        case 8: // ARGB (32-bit)
-            (a, r, g, b) = (int >> 24, int >> 16 & 0xFF, int >> 8 & 0xFF, int & 0xFF)
-        default:
-            (a, r, g, b) = (255, 0, 0, 0)
-        }
-        self.init(red: CGFloat(r) / 255, green: CGFloat(g) / 255, blue: CGFloat(b) / 255, alpha: CGFloat(a) / 255)
-    }
 }

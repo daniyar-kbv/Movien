@@ -8,7 +8,7 @@
 
 import Foundation
 
-class Movie: Decodable{
+class MovieFull: Decodable{
     var originalTitle: String = ""
     var posterPath: String = ""
     var genres: [String] = []
