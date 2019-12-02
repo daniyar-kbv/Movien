@@ -22,6 +22,8 @@ class MovieCell: UITableViewCell {
     
     lazy var titleLabel: UILabel = {
         let title = UILabel()
+        title.lineBreakMode = .byTruncatingTail
+        title.numberOfLines = 1
         title.textColor = .white
         return title
     }()
@@ -30,6 +32,7 @@ class MovieCell: UITableViewCell {
         let overview = UILabel()
         overview.lineBreakMode = .byTruncatingTail
         overview.numberOfLines = 2
+        overview.textColor = .white
         return overview
     }()
     
@@ -43,7 +46,7 @@ class MovieCell: UITableViewCell {
     }
     
     private func setupUI() {
-        self.backgroundColor = colorPrimary
+        self.backgroundColor = .black
             
         self.addSubview(posterImageView)
         posterImageView.snp.makeConstraints { (make) in
@@ -55,13 +58,14 @@ class MovieCell: UITableViewCell {
         titleLabel.snp.makeConstraints { (make) in
             make.top.equalTo(posterImageView.snp.bottom).offset(12)
             make.left.equalTo(20)
+            make.right.equalTo(-20)
         }
         
         self.addSubview(overviewLabel)
         overviewLabel.snp.makeConstraints { (make) in
             make.top.equalTo(titleLabel.snp.bottom).offset(6)
             make.left.equalTo(titleLabel.snp.left)
-            make.right.equalTo(-20)
+            make.right.equalTo(titleLabel.snp.right)
         }
     }
 }
