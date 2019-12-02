@@ -8,6 +8,7 @@ target 'Movien' do
   # Pods for Movien
     pod 'SnapKit', '~> 5.0.0'
     pod 'Alamofire'
+    pod 'Kingfisher', '~> 5.0'
 
   target 'MovienTests' do
     inherit! :search_paths
