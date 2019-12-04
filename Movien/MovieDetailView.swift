@@ -41,16 +41,16 @@ class MovieDetailView: UIViewController {
     lazy var filmName: UILabel = {
         let label = UILabel(frame: CGRect(x: 0, y: 0, width: 200, height: 21))
         label.textColor = .white
+        label.font = UIFont(name: "AppleSDGothicNeo-Light" , size: 30)
         return label
     }()
     
     lazy var filmGenres: UILabel = {
         let label = UILabel(frame: CGRect(x: 0, y: 0, width: 200, height: 21))
         label.textColor = .white
+        label.font = UIFont(name: "AppleSDGothicNeo-Light" , size: 22)
         return label
     }()
-    
-    lazy var filmInfo = UIView()
     
     lazy var filmRating: UILabel = {
         let label = UILabel(frame: CGRect(x: 0, y: 0, width: 50, height: 50))
@@ -62,13 +62,12 @@ class MovieDetailView: UIViewController {
         return label
     }()
     
-    lazy var filmInfoOnPhotoStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [filmInfo, filmRating])
-        stackView.axis = .horizontal
-
+    lazy var filmInfoStackView: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: [filmName, filmGenres])
+        stackView.axis = .vertical
         return stackView
     }()
-    
+
     lazy var filmOverviewTextView: UITextView = {
         let view = UITextView()
         view.textColor = .white
@@ -77,14 +76,8 @@ class MovieDetailView: UIViewController {
         view.isEditable = false
         view.isScrollEnabled = false
         view.translatesAutoresizingMaskIntoConstraints = true
-        view.font = UIFont(name: "AppleSDGothicNeo-Light" , size: 18)
+        view.font = UIFont(name: "AppleSDGothicNeo-Light" , size: 22)
         view.sizeToFit()
-        return view
-    }()
-    
-    lazy var filmDetailsView: UIView = {
-        view = UIView()
-        view.backgroundColor = colorSecondary
         return view
     }()
     
@@ -92,6 +85,7 @@ class MovieDetailView: UIViewController {
         var label = UILabel()
         label.textColor = .white
         label.text = "Film details"
+        label.font = UIFont(name: "AppleSDGothicNeo-Light" , size: 30)
         return label
     }()
     
@@ -99,6 +93,7 @@ class MovieDetailView: UIViewController {
         var label = UILabel()
         label.text = "Release date: "
         label.textColor = .white
+        label.font = UIFont(name: "AppleSDGothicNeo-Light" , size: 22)
         return label
     }()
     
@@ -106,14 +101,22 @@ class MovieDetailView: UIViewController {
         var label = UILabel()
         label.text = "ProductionCountries: "
         label.textColor = .white
+        label.font = UIFont(name: "AppleSDGothicNeo-Light" , size: 22)
         return label
+    }()
+    
+    lazy var filmDetailsStackView: UIStackView = {
+        var view = UIStackView(arrangedSubviews: [filmDetailsLabel, filmDetailsReleaseDateLabel, filmDetailsProdCountriesLabel])
+        view.axis = .vertical
+        view.spacing = 20
+        return view
     }()
     
     lazy var reviewsButton: UIButton = {
         let button = UIButton(frame: CGRect(x: 0, y: 0, width: 100, height: 50))
-        button.backgroundColor = colorAccentRed
+        button.backgroundColor = colorAccentYellow
         button.setTitle("Reviews", for: .normal)
-        button.layer.cornerRadius = 15
+        button.layer.cornerRadius = 20
         button.tintColor = .white
 //        button.addTarget(self, action: #selector(buttonAction), for: .touchUpInside)
         return button
@@ -124,42 +127,6 @@ class MovieDetailView: UIViewController {
         setMovieDetails(id: String(movieId))
 //        setMovieDetails(id: "475557")
         markup()
-    }
-    
-    func getMovieDetail(id: String, completion: @escaping (MovieFull) -> Void) {
-        let url = baseUrl + "/3/movie/" + id
-        
-        Alamofire.request(url, method: .get, encoding:  URLEncoding.default, headers: headers ).responseJSON(completionHandler: { response in
-            print(response)
-            switch response.result {
-            case .failure(let error):
-                print(error)
-            case .success(let data):
-                guard let jsonArray = data as? NSDictionary else { return }
-                let originalTitle = jsonArray["original_title"]
-                let posterPath = jsonArray["poster_path"]
-                guard let genres = jsonArray["genres"] as? NSArray else {return}
-                var genresArray: [String] = []
-                for genre in genres{
-                    guard let genreTemp = genre as? NSDictionary else { return }
-                    let genreName = genreTemp["name"]
-                    genresArray.append(genreName as! String)
-                }
-                let overview = jsonArray["overview"]
-                let releaseDate = jsonArray["release_date"]
-                guard let voteAverage = jsonArray["vote_average"] as? NSNumber else {return}
-                let voteAverageString = "\(String(describing: voteAverage))"
-                guard let productionCountries = jsonArray["production_countries"] as? NSArray else {return}
-                var productionCountriesArray: [String] = []
-                for country in productionCountries{
-                    guard let countryTemp = country as? NSDictionary else { return }
-                    let countryName = countryTemp["name"]
-                    productionCountriesArray.append(countryName as! String)
-                }
-                let movie = MovieFull(originalTitle: originalTitle as! String, posterPath: posterPath as! String, genres: genresArray, overview: overview as! String, releaseDate: releaseDate as! String, voteAverage: voteAverageString , productionCountries: productionCountriesArray)
-                completion(movie)
-            }
-        })
     }
     
     private func setMovieDetails(id: String){
@@ -193,9 +160,12 @@ class MovieDetailView: UIViewController {
         mainStackView.translatesAutoresizingMaskIntoConstraints = false
         mainStackView.axis = .vertical
         mainStackView.spacing = 10;
+        mainStackView.snp.makeConstraints(){
+            $0.bottom.equalTo(-60)
+        }
         
         mainStackView.leadingAnchor.constraint(equalTo: mainScrollView.leadingAnchor).isActive = true;
-        mainStackView.topAnchor.constraint(equalTo: mainScrollView.topAnchor).isActive = true;
+        mainStackView.topAnchor.constraint(equalTo: mainScrollView.topAnchor, constant: -50).isActive = true;
         mainStackView.trailingAnchor.constraint(equalTo: mainScrollView.trailingAnchor).isActive = true;
         mainStackView.bottomAnchor.constraint(equalTo: mainScrollView.bottomAnchor).isActive = true;
         mainStackView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true;
@@ -204,62 +174,43 @@ class MovieDetailView: UIViewController {
         photoView.snp.makeConstraints() {
             $0.top.left.equalTo(0)
             $0.right.equalTo(mainScrollView.snp.right)
-            $0.height.equalTo(400)
+            $0.height.equalTo(500)
         }
         
-        
-        photoView.addSubview(filmInfoOnPhotoStackView)
-        filmInfoOnPhotoStackView.snp.makeConstraints(){
-            $0.bottom.equalTo(photoView.snp.bottom)
-            $0.width.equalTo(photoView.snp.width)
-        }
-        
-        filmInfo.snp.makeConstraints(){
-            $0.left.equalTo(photoView.snp.left).offset(12)
-        }
-        
-        filmInfo.addSubview(filmGenres)
-        filmGenres.snp.makeConstraints(){
-            $0.bottom.equalTo(photoView.snp.bottom).offset(-12)
-            $0.height.equalTo(20)
-        }
-        
-        filmInfo.addSubview(filmName)
-        filmName.snp.makeConstraints(){
-            $0.bottom.equalTo(filmGenres.snp.top)
-        }
-        
+        photoView.addSubview(filmRating)
         filmRating.snp.makeConstraints(){
+            $0.right.equalTo(photoView.snp.right)
+            $0.width.height.equalTo(50)
             $0.bottom.equalTo(photoView.snp.bottom).offset(-12)
             $0.right.equalTo(photoView.snp.right).offset(-12)
         }
         
-        filmRating.snp.makeConstraints(){
-            $0.right.equalTo(photoView.snp.right)
-            $0.width.height.equalTo(50)
+        mainStackView.addArrangedSubview(filmInfoStackView)
+        filmInfoStackView.snp.makeConstraints(){
+            $0.top.equalTo(photoView.snp.bottom).offset(12)
+            $0.left.equalTo(12)
+            $0.width.equalTo(photoView.snp.width)
         }
+        
         
         mainStackView.addArrangedSubview(filmOverviewTextView)
         filmOverviewTextView.snp.makeConstraints(){
-            $0.top.equalTo(photoView.snp.bottom)
+            $0.top.equalTo(filmInfoStackView.snp.bottom).offset(12)
             $0.left.right.equalTo(0)
         }
         
-//        mainStackView.addArrangedSubview(filmDetailsView)
-//        filmDetailsView.snp.makeConstraints(){
-//            $0.top.equalTo(filmOverviewTextView.snp.bottom)
-//            $0.height.equalTo(100)
-//        }
-        
-//        filmDetailsView.addSubview(filmDetailsLabel)
-//        filmDetailsView.addSubview(filmDetailsReleaseDateLabel)
-//        filmDetailsView.addSubview(filmDetailsProdCountriesLabel)
+        mainStackView.addArrangedSubview(filmDetailsStackView)
+        filmDetailsStackView.snp.makeConstraints(){
+            $0.left.equalTo(12)
+        }
         
         view.addSubview(reviewsButton)
         reviewsButton.snp.makeConstraints(){
-            $0.bottom.equalTo(view.snp.bottom).offset(-12)
+            $0.bottom.equalTo(view.snp.bottom).offset(-30)
             $0.centerX.equalTo(view.snp.centerX)
-            $0.width.equalTo(100)
+            $0.width.equalTo(200)
+            $0.height.equalTo(50)
+            
         }
     }
         
