@@ -18,6 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         window = UIWindow(frame: UIScreen.main.bounds)
         let vc = MovieListView()
+//        let vc = MovieDetailView()
         let navController = UINavigationController(rootViewController: vc)
         window?.rootViewController = navController
         window?.makeKeyAndVisible()
