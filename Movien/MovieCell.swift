@@ -25,6 +25,7 @@ class MovieCell: UITableViewCell {
         title.lineBreakMode = .byTruncatingTail
         title.numberOfLines = 1
         title.textColor = .white
+        title.font = UIFont(name: "Helvetica-Bold" , size: 22)
         return title
     }()
     
@@ -32,7 +33,7 @@ class MovieCell: UITableViewCell {
         let overview = UILabel()
         overview.lineBreakMode = .byTruncatingTail
         overview.numberOfLines = 2
-        overview.textColor = .white
+        overview.textColor = .lightGray
         return overview
     }()
     

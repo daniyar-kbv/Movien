@@ -11,4 +11,4 @@ import SnapKit
 import Alamofire
 import Kingfisher
 
-class MovieDetailView: UIViewController {
+//class MovieDetailView: UIViewController {

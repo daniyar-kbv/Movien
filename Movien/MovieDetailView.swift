@@ -15,7 +15,7 @@ class MovieDetailView: UIViewController {
     
     lazy var movieId: Int = 0
     
-    var filmPhoto = UIImage(named: "joker-poster")
+    var filmPhoto = UIImage()
     var movie: MovieFull = MovieFull(originalTitle: "", posterPath: "", genres: [], overview: "", releaseDate: "", voteAverage: "", productionCountries: [])
     var movieName: String = ""
     
@@ -112,20 +112,19 @@ class MovieDetailView: UIViewController {
         return view
     }()
     
-    lazy var reviewsButton: UIButton = {
+    lazy var shareButton: UIButton = {
         let button = UIButton(frame: CGRect(x: 0, y: 0, width: 100, height: 50))
         button.backgroundColor = colorAccentYellow
-        button.setTitle("Reviews", for: .normal)
+        button.setTitle("SHARE", for: .normal)
         button.layer.cornerRadius = 20
         button.tintColor = .white
-//        button.addTarget(self, action: #selector(buttonAction), for: .touchUpInside)
+        button.addTarget(self, action: #selector(onShareClick), for: .touchUpInside)
         return button
     }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setMovieDetails(id: String(movieId))
-//        setMovieDetails(id: "475557")
         markup()
     }
     
@@ -147,7 +146,6 @@ class MovieDetailView: UIViewController {
         // MARK: - Markup
     private func markup() {
         navigationController?.navigationBar.prefersLargeTitles = true
-//        view.backgroundColor = UIColor(hexString: Constants.color1)
     
         view.addSubview(mainScrollView)
         mainScrollView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0).isActive = true;
@@ -204,14 +202,19 @@ class MovieDetailView: UIViewController {
             $0.left.equalTo(12)
         }
         
-        view.addSubview(reviewsButton)
-        reviewsButton.snp.makeConstraints(){
+        view.addSubview(shareButton)
+        shareButton.snp.makeConstraints(){
             $0.bottom.equalTo(view.snp.bottom).offset(-30)
             $0.centerX.equalTo(view.snp.centerX)
             $0.width.equalTo(200)
             $0.height.equalTo(50)
-            
         }
     }
-        
+    @objc private func onShareClick(sender: UIButton) {
+        let image = photoView.image
+        let imageToShare = [ image ]
+        let activityViewController = UIActivityViewController(activityItems: imageToShare, applicationActivities: nil)
+        activityViewController.popoverPresentationController?.sourceView = view
+        present(activityViewController, animated: true, completion: nil)
+    }
 }

@@ -19,7 +19,7 @@ class MovieListView: UIViewController, UITableViewDataSource, UITableViewDelegat
     private let tableView: UITableView = {
         let table = UITableView()
         table.backgroundColor = .black
-        table.rowHeight = 412
+        table.rowHeight = 428
         table.separatorStyle = .none
         table.showsVerticalScrollIndicator = false
         return table
