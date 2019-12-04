@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Firebase
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -19,8 +20,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let vc = MovieListView()
         let navController = UINavigationController(rootViewController: vc)
         window?.rootViewController = navController
-        window = window ?? UIWindow(frame: UIScreen.main.bounds)
         window?.makeKeyAndVisible()
+        
+        FirebaseApp.configure()
 
         return true
     }

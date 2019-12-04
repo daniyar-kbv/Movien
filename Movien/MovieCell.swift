@@ -46,22 +46,22 @@ class MovieCell: UITableViewCell {
     }
     
     private func setupUI() {
-        self.backgroundColor = .black
+        backgroundColor = .black
             
-        self.addSubview(posterImageView)
+        addSubview(posterImageView)
         posterImageView.snp.makeConstraints { (make) in
             make.top.left.right.equalToSuperview()
             make.height.equalTo(320)
         }
         
-        self.addSubview(titleLabel)
+        addSubview(titleLabel)
         titleLabel.snp.makeConstraints { (make) in
             make.top.equalTo(posterImageView.snp.bottom).offset(12)
-            make.left.equalTo(20)
+            make.left.equalToSuperview().inset(20)
             make.right.equalTo(-20)
         }
         
-        self.addSubview(overviewLabel)
+        addSubview(overviewLabel)
         overviewLabel.snp.makeConstraints { (make) in
             make.top.equalTo(titleLabel.snp.bottom).offset(6)
             make.left.equalTo(titleLabel.snp.left)

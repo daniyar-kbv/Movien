@@ -10,6 +10,7 @@ import UIKit
 import SnapKit
 import Kingfisher
 import Alamofire
+import FirebaseAnalytics
 
 class MovieListView: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
@@ -17,6 +18,7 @@ class MovieListView: UIViewController, UITableViewDataSource, UITableViewDelegat
     
     private let tableView: UITableView = {
         let table = UITableView()
+        table.backgroundColor = .black
         table.rowHeight = 412
         table.separatorStyle = .none
         table.showsVerticalScrollIndicator = false
@@ -27,12 +29,6 @@ class MovieListView: UIViewController, UITableViewDataSource, UITableViewDelegat
         super.viewDidLoad()
         setupUI()
         loadMovies()
-//        let viewController = UIViewController()
-//        viewController.view.backgroundColor = UIColor.blue.withAlphaComponent(0.75)
-//        present(viewController, animated: true)
-//        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-//            self.navigationController?.pushViewController(viewController, animated: true)
-//        }
     }
     
     private func setupUI() {
@@ -86,6 +82,9 @@ class MovieListView: UIViewController, UITableViewDataSource, UITableViewDelegat
         let movieId = movies[indexPath.row].id
         let movieDetailView = MovieDetailView()
         movieDetailView.movieId = movieId
+        Analytics.logEvent(AnalyticsEventSelectContent, parameters: [
+            eventMovieClicked: movieId
+        ])
         self.navigationController?.pushViewController(movieDetailView, animated: true)
     }
 }

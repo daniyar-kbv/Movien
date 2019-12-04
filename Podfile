@@ -9,6 +9,9 @@ target 'Movien' do
     pod 'SnapKit', '~> 5.0.0'
     pod 'Alamofire'
     pod 'Kingfisher', '~> 5.0'
+    pod 'Firebase/Analytics'
+    pod 'Fabric', '~> 1.10.2'
+    pod 'Crashlytics', '~> 3.14.0'
 
   target 'MovienTests' do
     inherit! :search_paths
