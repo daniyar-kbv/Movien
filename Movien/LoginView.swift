@@ -11,6 +11,7 @@ import SnapKit
 import Alamofire
 import Kingfisher
 
+
 class LoginView: UIViewController {
     lazy var mainView: UIView = {
         view = UIView()
