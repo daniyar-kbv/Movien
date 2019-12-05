@@ -2,6 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:../ala.gpx">
+   </FileRef>
+   <FileRef
       location = "group:Movien.xcodeproj">
    </FileRef>
    <FileRef

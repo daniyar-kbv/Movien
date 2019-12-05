@@ -51,3 +51,79 @@ func getMovieDetail(id: String, completion: @escaping (MovieFull) -> Void) {
         }
     })
 }
+
+
+func createRequestToken(completion: @escaping (String) -> Void){
+    let url = baseUrl + "/3/authentication/token/new"
+        
+    Alamofire.request(url,
+                      method: .get,
+                      headers: headers).responseJSON { response in
+        switch response.result {
+        case .failure(let error):
+            print(error)
+        case .success(let data):
+            guard let json = data as? NSDictionary else { return }
+            let is_success = json["success"] as! Int
+            if is_success != 1{
+                return
+            }
+            let requestToken = json["request_token"] as! String
+            completion(requestToken)
+        }
+    }
+}
+
+func createSessionWithlogin(username: String, password: String, requsetToken: String, completion: @escaping (String) -> Void){
+    let url = baseUrl + "/3/authentication/token/validate_with_login"
+    let parameters = [
+        "username": username,
+        "password": password,
+        "request_token": requsetToken
+    ]
+    Alamofire.request(url,
+                      method: .post,
+                      parameters: parameters,
+                      headers: headers).responseJSON { response in
+        switch response.result {
+        case .failure(let error):
+            print(error)
+        case .success(let data):
+            guard let json = data as? NSDictionary else { return }
+            let is_success = json["success"]
+            if is_success == nil{
+                completion("error")
+                return
+            }
+            let requestToken = json["request_token"] as! String
+            completion(requestToken)
+        }
+    }
+}
+
+func createSession(requestToken: String, completion: @escaping (String) -> Void){
+    let url = baseUrl + "/3/authentication/token/validate_with_login"
+    let parameters = [
+        "request_token": requestToken
+    ]
+        
+    Alamofire.request(url,
+                      method: .post,
+                      parameters: parameters,
+                      headers: headers).responseJSON { response in
+        switch response.result {
+        case .failure(let error):
+            print(error)
+        case .success(let data):
+            guard let json = data as? NSDictionary else { return }
+            let is_success = json["success"]
+            if is_success == nil{
+                completion("error")
+                return
+            }
+            let sessionId = json["session_id"] as! String
+            completion(sessionId)
+        }
+    }
+}
+
