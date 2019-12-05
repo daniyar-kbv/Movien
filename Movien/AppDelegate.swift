@@ -17,10 +17,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
         window = UIWindow(frame: UIScreen.main.bounds)
-        let vc = MovieListView()
-//        let vc = MovieDetailView()
-        let navController = UINavigationController(rootViewController: vc)
-        window?.rootViewController = navController
+        window?.rootViewController = LoginView()
+        window = window ?? UIWindow(frame: UIScreen.main.bounds)
         window?.makeKeyAndVisible()
         
         FirebaseApp.configure()
