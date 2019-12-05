@@ -204,7 +204,7 @@ class MovieDetailView: UIViewController {
         
         view.addSubview(shareButton)
         shareButton.snp.makeConstraints(){
-            $0.bottom.equalTo(view.snp.bottom).offset(-30)
+            $0.bottom.equalTo(view.snp.bottom).offset(-100)
             $0.centerX.equalTo(view.snp.centerX)
             $0.width.equalTo(200)
             $0.height.equalTo(50)
